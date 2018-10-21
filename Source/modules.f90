@@ -183,6 +183,7 @@ END MODULE HEALPIX_MODULE
 !=======================================================================
 MODULE CHEMISTRY_MODULE
 
+   USE ISO_C_BINDING
    USE HEALPIX_TYPES
    IMPLICIT NONE
 
@@ -193,7 +194,8 @@ MODULE CHEMISTRY_MODULE
    REAL(KIND=DP),     ALLOCATABLE :: ALPHA(:),BETA(:),GAMMA(:),RTMIN(:),RTMAX(:) ! Arrhenius equation parameters for each chemical reaction and the minimum/maximum temperatures within which they are valid
    INTEGER(KIND=I4B), ALLOCATABLE :: DUPLICATE(:) ! Duplicate reaction indices (0: new reaction; 1: duplicate of the previous reaction; 2: second duplicate of a previous reaction; etc.)
 
-   REAL(KIND=DP) :: RELATIVE_ABUNDANCE_TOLERANCE,ABSOLUTE_ABUNDANCE_TOLERANCE ! Relative (RTOL) and absolute (ATOL) error tolerances for the calculated abundances
+   REAL(KIND=DP),BIND(C,name="chemistry_module_mp_relative_abundance_tolerance_") :: RELATIVE_ABUNDANCE_TOLERANCE
+   REAL(KIND=DP),BIND(C,name="chemistry_module_mp_absolute_abundance_tolerance_") :: ABSOLUTE_ABUNDANCE_TOLERANCE ! Relative (RTOL) and absolute (ATOL) error tolerances for the calculated abundances
 
 END MODULE CHEMISTRY_MODULE
 !=======================================================================
@@ -202,10 +204,12 @@ END MODULE CHEMISTRY_MODULE
 MODULE GLOBAL_MODULE
 
    USE HEALPIX_TYPES
+   USE ISO_C_BINDING
    IMPLICIT NONE
 
 !  Species and reaction indices (assigned within the subroutines READ_SPECIES and READ_REACTIONS)
-   INTEGER(KIND=I4B) :: nelect,nH,nHx,nD,nDx,nH2,nH2x,nH3x,nHD,nH2Dx,nHe,nHex,nC,nCx,nN,nNx,nO,nOx, &
+   INTEGER(KIND=I4B),BIND(C,name="global_module_mp_nelect_") :: nelect
+   INTEGER(KIND=I4B) :: nH,nHx,nD,nDx,nH2,nH2x,nH3x,nHD,nH2Dx,nHe,nHex,nC,nCx,nN,nNx,nO,nOx, &
                       & nF,nFx,nNa,nNax,nMg,nMgx,nSi,nSix,nS,nSx,nCl,nClx,nCa,nCax,nCaxx,nFe,nFex,  &
                       & nCH,nCHx,nCH2,nCH2x,nCH3x,nOH,nH2O,nH2Ox,nH3Ox,nNH,nNH2,nNH3,nCO,nHCOx,nCS, &
                       & nH2v,nPAH,nPAHx,nPAHm
@@ -215,7 +219,8 @@ MODULE GLOBAL_MODULE
                       & nR_H3Ox_1,nR_H3Ox_2,nR_H3Ox_3,nR_HCOx_1
 
 !  Specify various global properties used throughout the code
-   REAL(KIND=DP) :: START_TIME,END_TIME ! Start and end times for the chemical evolution (yr)
+   REAL(KIND=DP),BIND(C,name="global_module_mp_start_time_") :: START_TIME
+   REAL(KIND=DP),BIND(C,name="global_module_mp_end_time_") :: END_TIME ! Start and end times for the chemical evolution (yr)
    REAL(KIND=DP) :: ZETA ! Cosmic-ray ionization rate (s^-1)
    REAL(KIND=DP) :: T_CMB ! Cosmic microwave background temperature (K)
    REAL(KIND=DP) :: V_TURB ! Microturbulent velocity (cm s^-1)
@@ -530,18 +535,6 @@ MODULE SUBROUTINES_MODULE
          REAL(KIND=DP),     INTENT(OUT) :: POPULATION(:)
       END SUBROUTINE CALCULATE_LTE_POPULATIONS
 
-      SUBROUTINE CONSTRUCT_TRANSITION_MATRIX(NRAYS,N,COOLANT,PARTICLE,TRANSITION_MATRIX)
-         USE HEALPIX_TYPES
-         USE COOLANT_MODULE
-         USE PARTICLE_MODULE
-         IMPLICIT NONE
-         INTEGER(KIND=I4B),   INTENT(IN)    :: NRAYS
-         INTEGER(KIND=I4B),   INTENT(IN)    :: N
-         TYPE(COOLANT_TYPE),  INTENT(IN)    :: COOLANT
-         TYPE(PARTICLE_TYPE), INTENT(INOUT) :: PARTICLE
-         REAL(KIND=DP),       INTENT(OUT)   :: TRANSITION_MATRIX(:,:)
-      END SUBROUTINE CONSTRUCT_TRANSITION_MATRIX
-
       SUBROUTINE GAUSS_JORDAN(N,A,B)
          USE HEALPIX_TYPES
          IMPLICIT NONE
@@ -709,4 +702,24 @@ MODULE OUTPUT_MODULE
    END INTERFACE
 
 END MODULE OUTPUT_MODULE
+
+MODULE TRANSITION_MATRIX_MODULE
+
+   INTERFACE
+
+      SUBROUTINE CONSTRUCT_TRANSITION_MATRIX(NRAYS,N,COOLANT,PARTICLE,TRANSITION_MATRIX)
+         USE HEALPIX_TYPES
+         USE COOLANT_MODULE
+         USE PARTICLE_MODULE
+         IMPLICIT NONE
+         INTEGER(KIND=I4B),   INTENT(IN)    :: NRAYS
+         INTEGER(KIND=I4B),   INTENT(IN)    :: N
+         TYPE(COOLANT_TYPE),  INTENT(IN)    :: COOLANT
+         TYPE(PARTICLE_TYPE), INTENT(INOUT) :: PARTICLE
+         REAL(KIND=DP),       INTENT(OUT)   :: TRANSITION_MATRIX(:,:)
+      END SUBROUTINE CONSTRUCT_TRANSITION_MATRIX
+
+   END INTERFACE
+
+END MODULE TRANSITION_MATRIX_MODULE
 !=======================================================================
