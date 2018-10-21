@@ -21,7 +21,7 @@ SUBROUTINE READ_FIELD(FILENAME,NPART,NRAYS,PARTICLE)
    INTEGER(KIND=I4B),   INTENT(IN)    :: NPART,NRAYS
    TYPE(PARTICLE_TYPE), INTENT(INOUT) :: PARTICLE(*)
 
-   INTEGER(KIND=I4B) :: P,RAY_ID,IER
+   INTEGER(KIND=I4B) :: I,P,RAY_ID,IER
    REAL(KIND=DP) :: DRAINE_FIELD,XRAY_FIELD
 
 !  Open the input file
@@ -37,7 +37,7 @@ SUBROUTINE READ_FIELD(FILENAME,NPART,NRAYS,PARTICLE)
    END IF
 
 !  Read the FUV radiation field incident along the specified ray(s)
-   DO WHILE(IER.EQ.0)
+   DO I=1,NRAYS
       READ(1,*,IOSTAT=IER,END=1) RAY_ID,DRAINE_FIELD
 
 !     Exit the loop if the next comment line (describing the X-ray field) has been reached
@@ -62,7 +62,7 @@ SUBROUTINE READ_FIELD(FILENAME,NPART,NRAYS,PARTICLE)
    READ(1,*,IOSTAT=IER,END=1)
 
 !  Read the X-ray radiation field incident along the specified ray(s)
-   DO WHILE(IER.EQ.0)
+   DO I=1,NRAYS
       READ(1,*,IOSTAT=IER,END=1) RAY_ID,XRAY_FIELD
 
 !     Produce an error message if an unexpected data format is encountered
@@ -89,7 +89,7 @@ SUBROUTINE READ_FIELD(FILENAME,NPART,NRAYS,PARTICLE)
    END DO
 
 !  Clode the file once the end is reached
- 1 CLOSE(1)
+1  CLOSE(1)
 
    RETURN
 END SUBROUTINE READ_FIELD
