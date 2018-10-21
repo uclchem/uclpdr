@@ -3,12 +3,12 @@
 SHELL = /bin/sh
 
 CC       = gcc
-F90      = ifort
-LNKR     = ifort
+F90      = gfortran
+LNKR     = gfortran
 CPPFLAGS = -cpp
 CFLAGS   = -fopenmp -DOPENMP
-FFLAGS   = -openmp -DOPENMP
-LDFLAGS  = -openmp
+FFLAGS   = -fopenmp -DOPENMP -ffree-line-length-0
+LDFLAGS  = -fopenmp
 LIBS     = -lm
 
 CFLAGS  += -O2 -Wall
@@ -29,10 +29,8 @@ FFLAGS += -DPHOTO_CROSS_SECTIONS
 #CFLAGS += -DLOG_ODES
 
 # Modify the following two lines to point to the /include and /lib directories of your SUNDIALS installation
-INCLUDES  = -I/import/bobo1/sundials/v2.5.0/include
-LIBRARIES = -L/import/bobo1/sundials/v2.5.0/lib 
-#INCLUDES  = -I/home/sv/sundials/v2.5.0/include
-#LIBRARIES = -L/home/sv/sundials/v2.5.0/lib 
+INCLUDES  = -I/home/fdp/sundials/instdir/include
+LIBRARIES = -L/home/fdp/sundials/instdir/lib
 
 SOURCE  = definitions healpix_types modules convert_number
 SOURCE += main setup_logfiles count_lines count_substring swap_function spline
