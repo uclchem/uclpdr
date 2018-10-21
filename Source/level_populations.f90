@@ -42,6 +42,7 @@ SUBROUTINE CALCULATE_LEVEL_POPULATIONS(NRAYS,ID,COOLANT,PARTICLE)
    USE COOLANT_MODULE
    USE PARTICLE_MODULE
    USE SUBROUTINES_MODULE
+   USE TRANSITION_MATRIX_MODULE
 
    IMPLICIT NONE
 
@@ -145,7 +146,7 @@ SUBROUTINE GAUSS_JORDAN(N,A,B)
                      WRITE(6,"(' A(',I3,',',I3,') =',F4.1)") J,K,A(J,K)
                      WRITE(6,*) 'A ='
                      DO L=1,N
-                        WRITE(6,"(100(PD9.1))") A(L,:)
+                        WRITE(6,"(100(0PD9.1))") A(L,:)
                      END DO
                      WRITE(6,*)
                      STOP
