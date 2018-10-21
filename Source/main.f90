@@ -426,7 +426,7 @@ PROGRAM UCL_PDR
 !     Check for convergence of the population densities for each coolant
       CALL CHECK_POPULATION_CONVERGENCE(NPART,NCOOL,COOLANT,PARTICLE,PERCENTAGE_POPULATION_CONVERGED)
 
-      WRITE(6,"(' Convergence status:',20(' [',A,': ',I3,'%]',:))") ('T',INT(PERCENTAGE_TEMPERATURE_CONVERGED)),(TRIM(ADJUSTL(COOLANT(N)%NAME)),INT(PERCENTAGE_POPULATION_CONVERGED(N)),N=1,NCOOL)
+      WRITE(6,"(' Convergence status:',20(' [',A,': ',I3,'%]',:))") 'T',INT(PERCENTAGE_TEMPERATURE_CONVERGED),(TRIM(ADJUSTL(COOLANT(N)%NAME)),INT(PERCENTAGE_POPULATION_CONVERGED(N)),N=1,NCOOL)
 
 !     Stop iterations once all coolants are converged for all particles
       IF(ALL(INT(PERCENTAGE_POPULATION_CONVERGED).GE.100)) EXIT
@@ -578,7 +578,7 @@ PROGRAM UCL_PDR
    CALL ANALYSE_CHEMISTRY(FILE_PREFIX,FILE_SUFFIX,NPART,NSPEC,NREAC, &
                           END_TIME,SPECIES,REACTANT,PRODUCT,PARTICLE, &
                         & (/0.0D0,1.0D0,1.0D1,1.0D2,1.0D3,3.0D3,1.0D4/), &
-                        & (/"H ","H2 ","C ","CO ","H+ ","O+ ","e- "/))
+                        & (/"H  ","H2 ","C  ","CO ","H+ ","O+ ","e- "/))
 
 !  Write the final reaction rates to the output file
    CALL WRITE_REACTION_RATES(FILE_PREFIX,FILE_SUFFIX,NPART,NREAC,REACTANT,PARTICLE)
