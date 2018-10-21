@@ -24,7 +24,7 @@ SUBROUTINE ANALYSE_CHEMISTRY(PREFIX,SUFFIX,NPART,NSPEC,NREAC,TIME, &
    CHARACTER(LEN=*),    INTENT(IN) :: REACTANT(:,:),PRODUCT(:,:)
    TYPE(PARTICLE_TYPE), INTENT(IN) :: PARTICLE(:)
 
-   INTEGER(KIND=I4B)  :: I,J,K,L,M,N,P,INDEX,IP,ID
+   INTEGER(KIND=I4B)  :: I,J,K,L,M,N,P,INDEX,IP,ID,II
    INTEGER(KIND=I4B)  :: NPR(1:NREAC),NDR(1:NREAC)
    INTEGER(KIND=I4B)  :: LENGTH(4),NMAX(1),MULTIPLE,TOTAL
    REAL(KIND=DP)      :: ABUNDANCE1,ABUNDANCE2,PERCENTAGE
@@ -231,7 +231,13 @@ SUBROUTINE ANALYSE_CHEMISTRY(PREFIX,SUFFIX,NPART,NSPEC,NREAC,TIME, &
          TOTAL=TOTAL+NINT(PERCENTAGE)
 
 !        Find the first instance of the species of interest in the list of products
-         NMAX=MAXLOC(PRODUCT(NPR(N),:),(PRODUCT(NPR(N),:).EQ.SPECIES(I)))
+!         NMAX=MAXLOC(PRODUCT(NPR(N),:),(PRODUCT(NPR(N),:).EQ.SPECIES(I)))
+         DO II=1,4
+            IF (PRODUCT(NPR(N),II) .EQ. SPECIES(I)) THEN
+               NMAX = II
+               EXIT
+            END IF
+         END DO
          K=NMAX(1)
 
 !        Create the left- and right-hand sides of the reaction string
@@ -301,7 +307,13 @@ SUBROUTINE ANALYSE_CHEMISTRY(PREFIX,SUFFIX,NPART,NSPEC,NREAC,TIME, &
          TOTAL=TOTAL+NINT(PERCENTAGE)
 
 !        Find the first instance of the species of interest in the list of reactants
-         NMAX=MAXLOC(REACTANT(NDR(N),:),(REACTANT(NDR(N),:).EQ.SPECIES(I)))
+!         NMAX=MAXLOC(REACTANT(NDR(N),:),(REACTANT(NDR(N),:).EQ.SPECIES(I)))
+         DO II=1,4
+            IF (REACTANT(NDR(N),II) .EQ. SPECIES(I)) THEN
+               NMAX = II
+               EXIT
+            END IF
+         END DO
          K=NMAX(1)
 
 !        Create the left- and right-hand sides of the reaction string
