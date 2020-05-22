@@ -143,7 +143,9 @@ PROGRAM UCL_PDR
    WRITE(6,*) 'Setting up initial parameters...'
 
 !  Scale the initial abundances by the metallicity
-   INITIAL_ABUNDANCE = INITIAL_ABUNDANCE*METALLICITY
+   DO i=1,NSPEC
+      IF (.NOT. ANY((/nh,nh2,nhx/) .eq. i)) INITIAL_ABUNDANCE(i) = INITIAL_ABUNDANCE(i)*METALLICITY
+   END DO
 
 !  Specify the initial abundances for each particle
    DO P=1,NPART
