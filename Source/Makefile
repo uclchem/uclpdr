@@ -29,8 +29,8 @@ FFLAGS += -DPHOTO_CROSS_SECTIONS
 #CFLAGS += -DLOG_ODES
 
 # Modify the following two lines to point to the /include and /lib directories of your SUNDIALS installation
-INCLUDES  = -I/home/fdp/sundials/instdir/include
-LIBRARIES = -L/home/fdp/sundials/instdir/lib
+INCLUDES  = -I/home/jon/Documents/zupcx4/software/sundials/include
+LIBRARIES = -L/home/jon/Documents/zupcx4/software/sundials/lib
 
 SOURCE  = definitions healpix_types modules convert_number
 SOURCE += main setup_logfiles count_lines count_substring swap_function spline

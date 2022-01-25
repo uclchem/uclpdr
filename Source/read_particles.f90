@@ -22,7 +22,7 @@ SUBROUTINE READ_PARTICLES(FILENAME,NPART,PARTICLE)
    CHARACTER(LEN=1)  :: TYPE
 
 !  Open the input file
-   OPEN(UNIT=1,FILE='Input/'//FILENAME,IOSTAT=IER,ACTION='READ',STATUS='OLD')
+   OPEN(UNIT=1,FILE='Clouds/'//FILENAME,IOSTAT=IER,ACTION='READ',STATUS='OLD')
    READ(1,*,IOSTAT=IER) ! Skip the first line of comments (column headers, etc.)
 
 !  Produce an error message if the file does not exist (or cannot be opened for whatever reason)

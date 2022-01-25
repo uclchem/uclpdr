@@ -123,7 +123,7 @@ SUBROUTINE READ_PARAMETERS(FILENAME,PARTICLE_FILE,RADIATION_FILE,OUTPUT_PREFIX)
 !  Determine the number of particles in the model cloud, the number of
 !  species and reactions in the chemical network, and the total number
 !  of available photorate cross sections from the relevant input files
-   NPART = COUNT_LINES('Input/'//PARTICLE_FILE)-1
+   NPART = COUNT_LINES('Clouds/'//PARTICLE_FILE)-1
    NSPEC = COUNT_LINES('Datafiles/Chemical-Network/species.dat')
    NREAC = COUNT_LINES('Datafiles/Chemical-Network/rates.dat')
    NXSEC = COUNT_LINES('Datafiles/Photoreaction-Rates/photorates.dat')

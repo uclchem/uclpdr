@@ -1,9 +1,9 @@
 ================================|========= Version 2.0 ==========
  UCL-PDR model parameters file  |     Parameter descriptions
 ================================|================================
-var_Avenh_490.cloud	                    | Particle data filename
+bisbas.cloud	                    | Particle data filename
 10draine.dat					| Radiation field filename
-var_Avenh_490  		     	| Output file prefix
+test_bisbas  		     	| Output file prefix
 ================================|================================
 Ray-tracing parameters          |
 ================================|================================

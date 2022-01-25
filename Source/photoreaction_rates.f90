@@ -130,10 +130,10 @@ FUNCTION CI_PHOTOIONIZATION_RATE(K0,G0,AV,KAV,NCI,NH2,TGAS) RESULT(RATE)
 !  Calculate the optical depth in the CI absorption band, accounting
 !  for grain extinction and shielding by CI and overlapping H2 lines
    TAUC=KAV*AV+1.1D-17*NCI+(0.9D0*TGAS**0.27D0*(NH2/1.59D21)**0.45D0)
-
 !  Calculate the CI photoionization rate
    RATE=K0*G0*EXP(-TAUC)
-
+   write(79,8000) AV,NH2,NCI
+   8000 format(1pe15.5,','1pe15.5,','1pe15.5)
    RETURN
 END FUNCTION CI_PHOTOIONIZATION_RATE
 !=======================================================================

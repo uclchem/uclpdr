@@ -1,0 +1,16 @@
+#output
+*.pdf
+*.png
+Outputs/*.csv
+
+#fortran nonsense
+fort.*
+*.o
+*.mod
+*.so
+UCL-PDR
+
+*.log
+
+#my work
+ngc253*

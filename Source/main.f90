@@ -143,7 +143,9 @@ PROGRAM UCL_PDR
    WRITE(6,*) 'Setting up initial parameters...'
 
 !  Scale the initial abundances by the metallicity
-   INITIAL_ABUNDANCE = INITIAL_ABUNDANCE*METALLICITY
+   DO i=1,NSPEC
+      IF (.NOT. ANY((/nh,nh2,nhx/) .eq. i)) INITIAL_ABUNDANCE(i) = INITIAL_ABUNDANCE(i)*METALLICITY
+   END DO
 
 !  Specify the initial abundances for each particle
    DO P=1,NPART
@@ -152,6 +154,7 @@ PROGRAM UCL_PDR
 
 !  Calculate the column densities based on the initial abundances
    CALL CALCULATE_COLUMN_DENSITIES(NPART,NRAYS,NSPEC,PARTICLE)
+   
 
 !  Calculate the visual extinction for each particle based on the total column density (N_H)
    DO P=1,NPART
@@ -215,16 +218,16 @@ PROGRAM UCL_PDR
 
    DO TEMPERATURE_ITERATION=1,TEMPERATURE_ITERATIONS ! Start of thermal balance iteration loop
 
-   WRITE(6,*)
-   WRITE(6,*) 'Temperature iteration #',TRIM(NUM2STR(TEMPERATURE_ITERATION))
+         WRITE(6,*)
+         WRITE(6,*) 'Temperature iteration #',TRIM(NUM2STR(TEMPERATURE_ITERATION))
 
-!  Reset the chemistry convergence flag for each particle
-   PARTICLE%CHEMISTRY_CONVERGED = .FALSE.
-   PERCENTAGE_CHEMISTRY_CONVERGED = 0
+      !  Reset the chemistry convergence flag for each particle
+         PARTICLE%CHEMISTRY_CONVERGED = .FALSE.
+         PERCENTAGE_CHEMISTRY_CONVERGED = 0
 
-!  Delete any previous chemistry iteration output files before starting
-   INQUIRE(FILE=TRIM(ADJUSTL(FILE_PREFIX))//'.abun.0001',EXIST=FILE_EXISTS)
-   IF(FILE_EXISTS) CALL SYSTEM('rm '//TRIM(ADJUSTL(FILE_PREFIX))//'.abun.[0-9][0-9][0-9][0-9]')
+      !  Delete any previous chemistry iteration output files before starting
+         INQUIRE(FILE=TRIM(ADJUSTL(FILE_PREFIX))//'.abun.0001',EXIST=FILE_EXISTS)
+         IF(FILE_EXISTS) CALL SYSTEM('rm '//TRIM(ADJUSTL(FILE_PREFIX))//'.abun.[0-9][0-9][0-9][0-9]')
 
 #ifdef OPENMP
    CPU_CHEM = OMP_GET_WTIME()
@@ -232,24 +235,24 @@ PROGRAM UCL_PDR
    CALL CPU_TIME(CPU_CHEM)
 #endif
 
-   DO CHEMISTRY_ITERATION=1,CHEMISTRY_ITERATIONS ! Start of chemistry iteration loop
+      DO CHEMISTRY_ITERATION=1,CHEMISTRY_ITERATIONS ! Start of chemistry iteration loop
 
-      WRITE(6,*)
-      WRITE(6,*) 'Chemistry iteration #',TRIM(NUM2STR(CHEMISTRY_ITERATION))
-      WRITE(6,*) 'Calculating reaction rates...'
+         WRITE(6,*)
+         WRITE(6,*) 'Chemistry iteration #',TRIM(NUM2STR(CHEMISTRY_ITERATION))
+         WRITE(6,*) 'Calculating reaction rates...'
 
-!$OMP PARALLEL DEFAULT(NONE) &
-!$OMP    SHARED(NPART,NRAYS,NSPEC,NREAC,NXSEC,CROSS_SECTION,PARTICLE) &
-!$OMP    SHARED(REACTANT,PRODUCT,ALPHA,BETA,GAMMA,RTMIN,RTMAX,DUPLICATE)
-!$OMP DO
-!     Calculate the reaction rate coefficients for each particle
-      DO P=1,NPART
-         CALL CALCULATE_REACTION_RATES(NRAYS,NSPEC,NREAC,NXSEC,CROSS_SECTION,PARTICLE(P)%GAS_TEMPERATURE,PARTICLE(P)%DUST_TEMPERATURE, &
-                                     & PARTICLE(P)%FUV_FLUX,PARTICLE(P)%XRAY_ENERGY_DEPOSITION_RATE,PARTICLE(P)%FUV_SURFACE,PARTICLE(P)%AV, &
-                                     & PARTICLE(P)%COLUMN_DENSITY,REACTANT,PRODUCT,ALPHA,BETA,GAMMA,RTMIN,RTMAX,DUPLICATE, &
-                                     & PARTICLE(P)%RATE)
-         CALL CALCULATE_XRAY_IONIZATION_RATES(PARTICLE(P)%XRAY_ENERGIES,PARTICLE(P)%XRAY_FLUXES,PARTICLE(P)%RATE,REACTANT,NREAC)
-      END DO
+   !$OMP PARALLEL DEFAULT(NONE) &
+   !$OMP    SHARED(NPART,NRAYS,NSPEC,NREAC,NXSEC,CROSS_SECTION,PARTICLE) &
+   !$OMP    SHARED(REACTANT,PRODUCT,ALPHA,BETA,GAMMA,RTMIN,RTMAX,DUPLICATE)
+   !$OMP DO
+   !     Calculate the reaction rate coefficients for each particle
+         DO P=1,NPART
+            CALL CALCULATE_REACTION_RATES(NRAYS,NSPEC,NREAC,NXSEC,CROSS_SECTION,PARTICLE(P)%GAS_TEMPERATURE,PARTICLE(P)%DUST_TEMPERATURE, &
+                                        & PARTICLE(P)%FUV_FLUX,PARTICLE(P)%XRAY_ENERGY_DEPOSITION_RATE,PARTICLE(P)%FUV_SURFACE,PARTICLE(P)%AV, &
+                                        & PARTICLE(P)%COLUMN_DENSITY,REACTANT,PRODUCT,ALPHA,BETA,GAMMA,RTMIN,RTMAX,DUPLICATE, &
+                                        & PARTICLE(P)%RATE)
+            CALL CALCULATE_XRAY_IONIZATION_RATES(PARTICLE(P)%XRAY_ENERGIES,PARTICLE(P)%XRAY_FLUXES,PARTICLE(P)%RATE,REACTANT,NREAC)
+         END DO
 !$OMP END DO
 !$OMP END PARALLEL
 
@@ -464,10 +467,10 @@ PROGRAM UCL_PDR
    WRITE(6,*)
    WRITE(6,*) 'Calculating cooling rates...'
 
-!$OMP PARALLEL DEFAULT(NONE) &
-!$OMP SHARED(NPART,NCOOL,nH,nelect,PARTICLE) &
-!$OMP PRIVATE(N)
-!$OMP DO
+! $OMP PARALLEL DEFAULT(NONE) &
+! $OMP SHARED(NPART,NCOOL,nH,nelect,PARTICLE) &
+! $OMP PRIVATE(N)
+! $OMP DO
 !  Calculate the cooling rate due to the Lyman-alpha emission for each particle
 !  using the analytical expression of Spitzer (1978) neglecting photon trapping
    DO P=1,NPART
@@ -479,8 +482,8 @@ PROGRAM UCL_PDR
          END IF
       END DO
    END DO
-!$OMP END DO
-!$OMP END PARALLEL
+! $OMP END DO
+! $OMP END PARALLEL
 
 !$OMP PARALLEL DEFAULT(NONE) &
 !$OMP SHARED(NPART,NCOOL,PARTICLE) &
@@ -492,6 +495,13 @@ PROGRAM UCL_PDR
          PARTICLE(P)%COOLING_RATE(N) = SUM(PARTICLE(P)%COOLANT(N)%EMISSIVITY,MASK=.NOT.ISNAN(PARTICLE(P)%COOLANT(N)%EMISSIVITY))
       END DO
    END DO
+   ! !  Calculate the cooling rates for each particle
+   ! DO P=1,NPART
+   !    PARTICLE(P)%COOLING_RATE(1)=1.0d-16
+   !    DO N=2,NCOOL
+   !       PARTICLE(P)%COOLING_RATE(N) = 0.0!SUM(PARTICLE(P)%COOLANT(N)%EMISSIVITY,MASK=.NOT.ISNAN(PARTICLE(P)%COOLANT(N)%EMISSIVITY))
+   !    END DO
+   ! END DO
 !$OMP END DO
 !$OMP END PARALLEL
 

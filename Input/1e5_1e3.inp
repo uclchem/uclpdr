@@ -1,9 +1,9 @@
 ================================|========= Version 2.0 ==========
  UCL-PDR model parameters file  |     Parameter descriptions
 ================================|================================
-var_Avenh_490.cloud	                    | Particle data filename
-10draine.dat					| Radiation field filename
-var_Avenh_490  		     	| Output file prefix
+1e3.cloud	| Particle data filename
+1e5draine.dat					| Radiation field filename
+1e5_1e3		     	| Output file prefix
 ================================|================================
 Ray-tracing parameters          |
 ================================|================================
@@ -14,7 +14,7 @@ Ray-tracing parameters          |
 Physical parameters             |
 ================================|================================
 2.0E6							| Duration of simulation (yr)
-1.0E-16						| Cosmic-ray ionization rate (s^-1)
+5.0E-17							| Cosmic-ray ionization rate (s^-1)
 1.0								| Microturbulent velocity (km/s)
 1.0								| Metallicity (Z_solar)
 2.73							| Cosmic microwave background temperature (K)
@@ -28,7 +28,7 @@ Dust attenuation properties     |
 ================================|================================
 Initial temperature guesses     |
 ================================|================================
-50.0							| Gas temperature  (K; used when GUESS_TEMP is OFF)
+100.0							| Gas temperature  (K; used when GUESS_TEMP is OFF)
 20.0							| Dust temperature (K; used when CALC_TDUST is OFF)
 ================================|================================
 Iteration loop limits           |
@@ -53,7 +53,7 @@ Population density parameters   |
 ================================|================================
 Thermal balance parameters      |
 ================================|================================
-1.0E0							| Minimum allowed temperature (K)
+1.0E1							| Minimum allowed temperature (K)
 1.0E5							| Maximum allowed temperature (K)
 0.01							| Thermal balance accuracy (K difference)
 0.1								| Thermal balance accuracy (% difference)
