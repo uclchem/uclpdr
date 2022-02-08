@@ -10,7 +10,7 @@ file_prefix=argv[1] #prefix (including path) to output of model
 
 ray=0 #pick a ray remembering to count from 0
 
-dataframe_file="Outputs/"+file_prefix+".csv" #filename to store uclpdr output in a machine readable form
+dataframe_file="Meijerink/"+file_prefix+".csv" #filename to store uclpdr output in a machine readable form
 
 
 #this function loads all uclpdr outputs into one table

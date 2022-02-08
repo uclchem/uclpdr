@@ -1,4 +1,0 @@
-! FUV flux (in units of the Draine field) incident along each ray
-0 1.7D0
-! X-ray flux (in units of erg cm^-2 s^-1) incident along each ray
-0 0.0D0

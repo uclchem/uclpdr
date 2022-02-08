@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
 
-gas_density=10.0**3.0
+gas_density=10.0**3
 
-n_particles=25
-total_av=20
-avs=np.logspace(-7,1.3,n_particles)
+n_particles=250
+avs=np.logspace(-7,4,n_particles)
 
 av_per_column=6.289E-22
 column_densities=avs/av_per_column
@@ -36,4 +35,4 @@ cloud[columns[5]]=gas_temp
 cloud[columns[6]]=dust_temp
 cloud[columns[7]]=chi
 cloud[columns[8]]=particle_type
-cloud.to_csv("Clouds/new_bisbas.cloud",index=False)
+cloud.to_csv("Clouds/1e3.cloud",index=False)

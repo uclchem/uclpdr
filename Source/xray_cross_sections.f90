@@ -240,8 +240,8 @@ SUBROUTINE CALCULATE_XRAY_PROPERTIES(NPART,NRAYS,PARTICLE)
    REAL(KIND=DP), ALLOCATABLE :: ENERGY(:),SIGMA(:),FLUX(:)
 
 !  Define the effective temperature (K) of the X-ray spectrum
-   XRAY_TEMPERATURE = 1.16D7
-
+!   XRAY_TEMPERATURE = 1.16D7
+   XRAY_TEMPERATURE = 4D7
 !  Define the array of X-ray energies (eV) at which cross sections and fluxes will be calculated
    E_STEP = 1.0D0 ! 1 eV
    E_MIN  = 1.0D3 ! 1 keV

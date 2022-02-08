@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 file_prefix="ngc253_xrays" #prefix (including path) to output of model
 ray=0 #pick a ray remembering to count from 0
 
-dataframe_file="Outputs/test_bisbas.csv" #filename to store uclpdr output in a machine readable form
+dataframe_file="ngc253_xray_tests/ngc253_gmc5_full-xdr.csv" #filename to store uclpdr output in a machine readable form
 create_dataframe=False #flag for whether dataframe exists
 
-output_file=dataframe_file.replace(".csv",".pdf")
+output_file="ngc253_xray_tests/ngc253_gmc5_full-xdr_heating.pdf"#dataframe_file.replace(".csv",".pdf")
 
 figure_shape=(2,2) #nrows,ncols for grid of subplots
 figure_size=(16,9) #size in inches, just sets ratio for pdf outputs
