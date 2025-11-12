@@ -1,21 +1,40 @@
 # UCL_PDR
 
-UCL_PDR is a PDR code which solves the equilibrium chemistry and temperature of an arbitrary 1D cloud. It was written by [Bell et al. 2006](https://ui.adsabs.harvard.edu/abs/2006A%26A...459..805B/abstract) and modified by [Priestley et al. 2017](https://ui.adsabs.harvard.edu/abs/2017MNRAS.472.4444P/abstract). It is currently maintained by Jon Holdship.
+UCL_PDR is a PDR code which solves the equilibrium chemistry and temperature of an arbitrary 1D cloud. It was written by [Bell et al. 2006](https://ui.adsabs.harvard.edu/abs/2006A%26A...459..805B/abstract) and modified by [Priestley et al. 2017](https://ui.adsabs.harvard.edu/abs/2017MNRAS.472.4444P/abstract). The code is no longer maintained by Viti group, the code remains available online as a reference.
 
 # Usage
-UCL_PDR is currently command line only. After compiling the code with
+First, get ahold of a copy of sundials version 2.5.0. A copy is provided within this reposistory. 
+We thank the Sundials developers and acknowledge their license and terms. If you use this repository as a mirror,
+please do so as well. You can install sundials 2.5.0 using a few easy steps:
+#### Installing sundials 2.5.0
+Go into the sundials directory and run the following commands with the path where you want to install
+sundials
+```
+./configure --prefix $PWD/../sundials
+make
+make install
+```
+### Installing UCL_PDR
 
+First go into the source directory, this allows you to install run the make command:
 ```
 cd Source/
 make
 ```
-it can be run via
+If you get an error with regards to sundials not being found, please edit the INCLUDES and
+LIBRARIES to absolute paths on your system.
+It can then be executed via (assure your path is no longer than 256 characters.)
 
 ```
-./UCL_PDR
+./UCL-PDR INPUT_FILE_PATH
 ```
+UCL_PDR will then use the contents of INPUT_FILE_PATH to determine the parameters of the model to be run. 
 
-UCL_PDR will then use the contents of `Input/model-parameters.dat` to determine the parameters of the model to be run. 
+For example try:
+
+```
+./UCL-PDR Input/10_1e3.dat
+```
 
 ## Inputs
 

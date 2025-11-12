@@ -61,7 +61,7 @@ PROGRAM UCL_PDR
    WRITE(6,*) 'Reading input files...'
 
 !  Read the model parameters input file
-   CALL READ_PARAMETERS('Input/model-parameters.dat',PARTICLE_FILE,RADIATION_FILE,FILE_PREFIX)
+   CALL READ_PARAMETERS(PARTICLE_FILE,RADIATION_FILE,FILE_PREFIX)
 
 !  Allocate the chemical network arrays
    ALLOCATE(SPECIES(1:NSPEC),INITIAL_ABUNDANCE(1:NSPEC),MOLECULAR_MASS(1:NSPEC))
