@@ -38,7 +38,7 @@ sundialsTB/*/Makefile
 
 # Build directories
 build/
-bin/
+# bin/
 lib/
 
 # Example executables and outputs
