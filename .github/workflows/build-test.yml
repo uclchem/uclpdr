@@ -1,0 +1,77 @@
+name: Build and Test UCL_PDR
+
+on:
+  # Run on push and pull requests
+  push:
+    branches: [ gfortran ]
+  pull_request:
+    branches: [ gfortran ]
+  
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # Run yearly on January 1st at 00:00 UTC to check if dependencies still work
+  schedule:
+    - cron: '0 12 1 3 *'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gfortran build-essential
+    
+    - name: Build sundials-2.5.0
+      run: |
+        cd sundials-2.5.0
+        ./configure --prefix $PWD/../sundials
+        make
+        make install
+      
+    - name: Verify sundials installation
+      run: |
+        ls -la sundials/
+        ls -la sundials/lib/
+        ls -la sundials/include/
+    
+    - name: Build UCL_PDR
+      run: |
+        cd Source/
+        make
+    
+    - name: Verify UCL_PDR executable
+      run: |
+        ls -la UCL-PDR
+        file UCL-PDR
+    
+    - name: Run sample command
+      run: |
+        ./UCL-PDR Input/10_1e3.dat
+    
+    - name: Check for output files
+      run: |
+        # Check that some expected output files were created
+        if [ -f "10_1e3.abun.out" ] && [ -f "10_1e3.temp.out" ]; then
+          echo "Output files created successfully"
+          exit 0
+        else
+          echo "Expected output files not found"
+          exit 1
+        fi
+    
+    - name: Upload artifacts on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          sundials-2.5.0/config.log
+          Source/*.o
+          *.log
+        if-no-files-found: ignore
